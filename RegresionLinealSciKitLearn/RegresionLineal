@@ -1,0 +1,46 @@
+import pandas as pd
+import numpy as np
+from sklearn import linear_model
+from sklearn.metrics import r2_score # que tan cercano los vaores que se predicen a los dados
+import matplotlib.pyplot as plt
+
+#Modelo lineal
+regr= linear_model.LinearRegression()
+
+print("")
+print("Inicio del algoritmo de la regresion lineal")
+
+datos=pd.read_csv('movies.csv') #Proceso de lectura con pandas
+
+df=pd.DataFrame(datos)
+#variable x variable independiente
+#x=df['temperatura']
+x=df[df.keys()[0]]
+
+# variable Y dependiente depende a la temperatura
+y=df[df.keys()[1]]
+
+#le esta dando el fromatto de un arreglo a los datos que estmos llamando
+X=x[:,np.newaxis]
+print("A continuación se muestra como se le dio formato a los datos que se llamaron en formade arreglo")
+print(X)
+
+#Prediccion o modelo depende de X,y
+print("Predicción o el modelo que depende de X,y ", regr.fit(X,y))
+
+#coeficiente de regresion lineal
+print("El coeficiente de regresión lineal es: ",regr.coef_)
+
+m=regr.coef_[0]
+b=regr.intercept_ #intercepción
+y_p=m*X+b #valor que se predice
+print('y = {0} * X + {1}'.format(m,b))
+print(regr.predict(X)[0:5])
+print("El valor de r2: ",r2_score(y,y_p))
+fig=plt.figure(figsize=(5,5))
+plt.scatter(x,y,color='blue')
+plt.plot(x,y_p,color='red')
+plt.title('Regresion Lineal',fontsize=16)
+plt.xlabel('Temperatura',fontsize=13)
+plt.ylabel('ventas',fontsize=13)
+plt.show()
